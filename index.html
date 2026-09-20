@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SHIPMS — Smart Health Informatics &amp; Patient Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #132A24;
+    --ink-soft:   #3E524C;
+    --paper:      #F3F6F4;
+    --surface:    #FFFFFF;
+    --accent:     #0F6E63;
+    --accent-ink: #093B34;
+    --accent-soft:#E2EFEC;
+    --amber:      #A85B1B;
+    --amber-soft: #F6E9D9;
+    --rose:       #8F3B3B;
+    --rose-soft:  #F2E1E1;
+    --line:       #DBE3DF;
+    --line-soft:  #E9EEEC;
+    --muted:      #5C6E68;
+    --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink:        #EAF2EF;
+      --ink-soft:   #B9C9C3;
+      --paper:      #0E1613;
+      --surface:    #14201C;
+      --accent:     #4FB3A3;
+      --accent-ink: #CFEDE6;
+      --accent-soft:#1B2E29;
+      --amber:      #E1A667;
+      --amber-soft: #2E2419;
+      --rose:       #E0A0A0;
+      --rose-soft:  #2E1D1D;
+      --line:       #253430;
+      --line-soft:  #1B2723;
+      --muted:      #91A39C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink:        #EAF2EF;
+    --ink-soft:   #B9C9C3;
+    --paper:      #0E1613;
+    --surface:    #14201C;
+    --accent:     #4FB3A3;
+    --accent-ink: #CFEDE6;
+    --accent-soft:#1B2E29;
+    --amber:      #E1A667;
+    --amber-soft: #2E2419;
+    --rose:       #E0A0A0;
+    --rose-soft:  #2E1D1D;
+    --line:       #253430;
+    --line-soft:  #1B2723;
+    --muted:      #91A39C;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  button { font-family: inherit; }
+
+  .app { display: flex; min-height: 100%; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 232px;
+    flex: 0 0 232px;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    padding: env(safe-area-inset-top, 0px) 0 24px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand {
+    padding: 26px 22px 20px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .brand .mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    background: var(--accent);
+    color: var(--surface);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+  }
+  .brand h1 {
+    margin: 0 0 3px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .brand p {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  nav.primary-nav { padding: 14px 12px; flex: 1; }
+  nav.primary-nav button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 9px 12px;
+    margin-bottom: 2px;
+    background: transparent;
+    border: none;
+    border-left: 2px solid transparent;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  nav.primary-nav button .n {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    width: 16px;
+  }
+  nav.primary-nav button:hover { background: var(--line-soft); color: var(--ink); }
+  nav.primary-nav button.active {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  nav.primary-nav button.active .n { color: var(--accent); }
+  .sidebar-foot {
+    padding: 14px 22px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- Main ---------- */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 30px 36px 60px;
+  }
+  .view-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .view-head h2 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .view-head .sub { color: var(--muted); font-size: 13.5px; }
+  .btn {
+    appearance: none;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--accent-ink); border-color: var(--accent-ink); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--accent);
+  }
+  .btn.ghost:hover { background: var(--accent-soft); }
+  .btn.small { padding: 5px 10px; font-size: 12px; }
+  .btn.danger { border-color: var(--rose); background: var(--rose); }
+  .btn.danger:hover { background: #6f2c2c; border-color:#6f2c2c; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* ---------- Stat strip ---------- */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 26px;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 16px 18px;
+  }
+  .stat .label {
+    font-size: 11.5px;
+    color: var(--muted);
+    text-transform: none;
+    margin-bottom: 8px;
+  }
+  .stat .value {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .stat .value.hero { font-size: 40px; color: var(--accent-ink); }
+  .stat .foot { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .panel-row { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; margin-bottom: 10px; }
+  @media (max-width: 900px) { .panel-row { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .panel-title {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+  .panel-body { padding: 14px 16px; }
+  .diag-row, .doc-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13.5px;
+  }
+  .diag-row:last-child, .doc-row:last-child { border-bottom: none; }
+  .diag-row .count, .doc-row .count { font-family: var(--font-mono); color: var(--muted); }
+  .empty-note { color: var(--muted); font-size: 13.5px; padding: 6px 0; }
+
+  /* ---------- Forms ---------- */
+  .form-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    padding: 20px 22px 22px;
+    margin-bottom: 26px;
+  }
+  .form-panel h3 {
+    margin: 0 0 4px;
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+  .form-panel .hint { font-size: 12.5px; color: var(--muted); margin: 0 0 16px; }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  .field .opt { font-weight: 400; color: var(--muted); }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13.5px;
+    border-radius: 3px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    background: var(--surface);
+  }
+  .field.full { grid-column: 1 / -1; }
+  .form-actions { display: flex; gap: 10px; align-items: center; }
+  .field-error { color: var(--rose); font-size: 11.5px; margin-top: 4px; }
+
+  /* ---------- Table ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 560px; }
+  thead th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    background: var(--line-soft);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
+  td.id, td.mono { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+  td.actions { white-space: nowrap; text-align: right; }
+  td.actions button { margin-left: 6px; }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+  }
+  .pill.scheduled { background: var(--amber-soft); color: var(--amber); }
+  .pill.completed { background: var(--accent-soft); color: var(--accent-ink); }
+  .pill.unpaid { background: var(--rose-soft); color: var(--rose); }
+  .pill.paid { background: var(--accent-soft); color: var(--accent-ink); }
+
+  .toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  .toolbar input[type="search"] {
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 3px;
+    font-size: 13.5px;
+    min-width: 220px;
+    font-family: inherit;
+  }
+  .toolbar input[type="search"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .count-tag { font-size: 12.5px; color: var(--muted); font-family: var(--font-mono); }
+
+  .subrow td { background: var(--paper); padding: 14px 14px 16px 34px; }
+  .history-item { border-bottom: 1px dashed var(--line); padding: 8px 0; font-size: 13px; }
+  .history-item:last-child { border-bottom: none; }
+  .history-item .hd { display:flex; gap: 10px; color: var(--muted); font-family: var(--font-mono); font-size: 11.5px; margin-bottom: 3px;}
+  .inline-complete { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .inline-complete .field { flex: 1; min-width: 160px; }
+
+  .toast {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    font-size: 13px;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 50;
+    max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .empty-state {
+    border: 1px dashed var(--line);
+    padding: 34px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13.5px;
+    background: var(--surface);
+  }
+  .empty-state strong { display:block; color: var(--ink); font-size: 14.5px; margin-bottom: 4px; font-weight: 700; }
+  .empty-state button { margin-top: 12px; }
+
+  /* mobile */
+  .menu-toggle { display: none; }
+  @media (max-width: 780px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; flex: none; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
+    nav.primary-nav { display: none; padding-top: 0; }
+    nav.primary-nav.open { display: block; }
+    .brand { display: flex; align-items: center; justify-content: space-between; border-bottom: none; padding-bottom: 16px; }
+    .brand > div { display:flex; align-items:center; gap: 10px; }
+    .brand .mark { margin-bottom: 0; }
+    .menu-toggle {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      padding: 7px 12px;
+      border-radius: 3px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .sidebar-foot { display: none; }
+    main { padding: 24px 18px 50px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div>
+        <span class="mark">SH</span>
+      </div>
+      <button class="menu-toggle" id="menuToggle" type="button">Menu</button>
+    </div>
+    <div style="padding: 0 22px 16px;">
+      <h1>SHIPMS</h1>
+      <p>Smart Health Informatics &amp; Patient Management</p>
+    </div>
+    <nav class="primary-nav" id="primaryNav">
+      <button data-tab="dashboard"><span class="n">01</span>Dashboard</button>
+      <button data-tab="patients"><span class="n">02</span>Patients</button>
+      <button data-tab="doctors"><span class="n">03</span>Doctors</button>
+      <button data-tab="appointments"><span class="n">04</span>Appointments</button>
+      <button data-tab="billing"><span class="n">05</span>Billing</button>
+    </nav>
+    <div class="sidebar-foot" id="sidebarClock"></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     DATA LAYER — mirrors the original SQLite schema:
+     patients / doctors / appointments / medical_records / bills
+     Persisted per-browser via localStorage.
+  ========================================================== */
+  var STORAGE_KEY = "shipms_db_v1";
+  var db = null;
+
+  function defaultDB() {
+    return {
+      patients: [],
+      doctors: [],
+      appointments: [],
+      records: [],
+      bills: [],
+      seq: { patient: 1, doctor: 1, appt: 1, record: 1, bill: 1 }
+    };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) { db = JSON.parse(raw); return; }
+    } catch (e) { /* storage unavailable — fall back to in-memory */ }
+    db = defaultDB();
+  }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
+    catch (e) { /* best effort only */ }
+  }
+
+  function nextId(kind) { var id = db.seq[kind]++; save(); return id; }
+
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function findPatient(id) { return db.patients.find(function (p) { return p.id === id; }); }
+  function findDoctor(id) { return db.doctors.find(function (d) { return d.id === id; }); }
+
+  /* =========================================================
+     APP STATE + RENDER SHELL
+  ========================================================== */
+  var state = { tab: "dashboard", patientSearch: "", expandedHistory: null, completingAppt: null };
+
+  var $main = document.getElementById("main");
+  var $toast = document.getElementById("toast");
+
+  function esc(s) {
+    return String(s === undefined || s === null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function fmtMoney(n) { return "Rs. " + Number(n).toFixed(2); }
+
+  function toast(msg) {
+    $toast.textContent = msg;
+    $toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { $toast.classList.remove("show"); }, 2600);
+  }
+
+  function switchTab(tab) {
+    state.tab = tab;
+    state.expandedHistory = null;
+    state.completingAppt = null;
+    document.querySelectorAll("nav.primary-nav button").forEach(function (b) {
+      b.classList.toggle("active", b.dataset.tab === tab);
+    });
+    document.getElementById("primaryNav").classList.remove("open");
+    render();
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+
+  function render() {
+    if (state.tab === "dashboard") return renderDashboard();
+    if (state.tab === "patients") return renderPatients();
+    if (state.tab === "doctors") return renderDoctors();
+    if (state.tab === "appointments") return renderAppointments();
+    if (state.tab === "billing") return renderBilling();
+  }
+
+  /* =========================================================
+     DASHBOARD  (mirrors ReportManager.dashboard)
+  ========================================================== */
+  function renderDashboard() {
+    var totalPatients = db.patients.length;
+    var totalDoctors = db.doctors.length;
+    var totalAppts = db.appointments.length;
+    var completed = db.appointments.filter(function (a) { return a.status === "Completed"; }).length;
+    var pending = totalAppts - completed;
+    var revenue = db.bills.filter(function (b) { return b.paid === "Paid"; }).reduce(function (s, b) { return s + b.amount; }, 0);
+    var due = db.bills.filter(function (b) { return b.paid === "Unpaid"; }).reduce(function (s, b) { return s + b.amount; }, 0);
+
+    var diagCounts = {};
+    db.records.forEach(function (r) { diagCounts[r.diagnosis] = (diagCounts[r.diagnosis] || 0) + 1; });
+    var topDiag = Object.keys(diagCounts).map(function (k) { return { name: k, count: diagCounts[k] }; })
+      .sort(function (a, b) { return b.count - a.count; }).slice(0, 3);
+
+    var docCounts = {};
+    db.appointments.forEach(function (a) { docCounts[a.doctorId] = (docCounts[a.doctorId] || 0) + 1; });
+    var busiestId = Object.keys(docCounts).sort(function (a, b) { return docCounts[b] - docCounts[a]; })[0];
+    var busiest = busiestId ? findDoctor(Number(busiestId)) : null;
+
+    var html = '';
+    html += '<div class="view-head"><div><h2>Analytics dashboard</h2><p class="sub">' + esc(new Date().toDateString()) + '</p></div></div>';
+
+    html += '<div class="stat-grid">';
+    html += stat("Registered patients", totalPatients, "", true);
+    html += stat("Doctors on staff", totalDoctors);
+    html += stat("Appointments", totalAppts, completed + " completed &middot; " + pending + " pending");
+    html += stat("Revenue collected", fmtMoney(revenue).replace("Rs. ", "Rs."));
+    html += stat("Outstanding dues", fmtMoney(due).replace("Rs. ", "Rs."));
+    html += '</div>';
+
+    if (!totalPatients && !totalDoctors && !totalAppts && !db.bills.length) {
+      html += '<div class="empty-state"><strong>No records yet</strong>The dashboard fills in as patients, doctors, appointments and bills are added.<br><button class="btn" id="seedBtn" type="button">Load sample data</button></div>';
+    } else {
+      html += '<div class="panel-row">';
+      html += '<div class="panel"><div class="panel-title">Top diagnoses recorded</div><div class="panel-body">';
+      if (topDiag.length) {
+        topDiag.forEach(function (d) {
+          html += '<div class="diag-row"><span>' + esc(d.name) + '</span><span class="count">' + d.count + ' case' + (d.count === 1 ? "" : "s") + '</span></div>';
+        });
+      } else {
+        html += '<p class="empty-note">No diagnoses recorded yet — complete an appointment to add one.</p>';
+      }
+      html += '</div></div>';
+
+      html += '<div class="panel"><div class="panel-title">Busiest doctor</div><div class="panel-body">';
+      if (busiest) {
+        html += '<div class="doc-row"><span>' + esc(busiest.name) + '<br><span style="color:var(--muted);font-size:12px;">' + esc(busiest.specialization) + '</span></span><span class="count">' + docCounts[busiestId] + ' appt' + (docCounts[busiestId] === 1 ? "" : "s") + '</span></div>';
+      } else {
+        html += '<p class="empty-note">No appointments booked yet.</p>';
+      }
+      html += '</div></div>';
+      html += '</div>';
+    }
+
+    $main.innerHTML = html;
+    var seedBtn = document.getElementById("seedBtn");
+    if (seedBtn) seedBtn.addEventListener("click", seedSampleData);
+  }
+
+  function stat(label, value, foot, hero) {
+    return '<div class="stat"><div class="label">' + esc(label) + '</div><div class="value' + (hero ? " hero" : "") + '">' + value + '</div>' +
+      (foot ? '<div class="foot">' + foot + '</div>' : '') + '</div>';
+  }
+
+  function seedSampleData() {
+    var d1 = addDoctorRecord("Dr. Ananya Rao", "General Medicine", "9876500011");
+    var d2 = addDoctorRecord("Dr. Vikram Seth", "Orthopedics", "9876500022");
+    var p1 = addPatientRecord("Meera Iyer", 29, "F", "9876543210", "O+", "Bhopal, MP");
+    var p2 = addPatientRecord("Rohan Das", 41, "M", "9876543211", "B+", "Indore, MP");
+    var a1 = addApptRecord(p1.id, d1.id, today(), "Fever and body ache");
+    addApptRecord(p2.id, d2.id, today(), "Knee pain follow-up");
+    completeApptRecord(a1.id, "Viral fever", "Paracetamol 500mg, twice daily for 3 days");
+    addBillRecord(p1.id, "Consultation", 400);
+    var b2 = addBillRecord(p2.id, "X-Ray", 950);
+    markBillPaidRecord(b2.id);
+    save();
+    toast("Sample data loaded");
+    render();
+  }
+
+  /* =========================================================
+     PATIENTS  (mirrors PatientManager)
+  ========================================================== */
+  function addPatientRecord(name, age, gender, phone, blood, address) {
+    var rec = { id: nextId("patient"), name: name, age: age, gender: gender, phone: phone, blood: blood || "Not recorded", address: address || "Not recorded", registeredOn: today() };
+    db.patients.push(rec);
+    return rec;
+  }
+
+  function renderPatients() {
+    var html = '';
+    html += '<div class="view-head"><div><h2>Patients</h2><p class="sub">' + db.patients.length + ' registered</p></div>' +
+      '<button class="btn" id="toggleAddPatient" type="button">Register patient</button></div>';
+
+    html += formPanelPatient();
+
+    html += '<div class="toolbar"><input type="search" id="patientSearch" placeholder="Search by name or patient ID&hellip;" value="' + esc(state.patientSearch) + '">' +
+      '<span class="count-tag" id="patientCount"></span></div>';
+
+    html += '<div id="patientTableHolder"></div>';
+
+    $main.innerHTML = html;
+
+    document.getElementById("toggleAddPatient").addEventListener("click", function () {
+      var panel = document.getElementById("patientFormPanel");
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+    document.getElementById("patientForm").addEventListener("submit", onAddPatient);
+    document.getElementById("patientSearch").addEventListener("input", function (e) {
+      state.patientSearch = e.target.value;
+      renderPatientTable();
+    });
+    renderPatientTable();
+  }
+
+  function formPanelPatient() {
+    return '<div class="form-panel" id="patientFormPanel" style="display:none;">' +
+      '<h3>Register new patient</h3><p class="hint">Creates a patient record — mirrors <code>PatientManager.add_patient()</code>.</p>' +
+      '<form id="patientForm">' +
+      '<div class="form-grid">' +
+      field("pFullName", "Full name", "text", true) +
+      field("pAge", "Age", "number", true) +
+      selectField("pGender", "Gender", ["Female", "Male", "Other"], true) +
+      field("pPhone", "Phone number", "tel", true) +
+      field("pBlood", "Blood group", "text", false, "e.g. O+") +
+      field("pAddress", "Address", "text", false) +
+      '</div>' +
+      '<div class="form-actions"><button class="btn" type="submit">Register patient</button><button class="btn ghost" type="button" id="cancelPatient">Cancel</button></div>' +
+      '</form></div>';
+  }
+
+  function field(id, label, type, required, placeholder) {
+    return '<div class="field"><label for="' + id + '">' + esc(label) + (required ? "" : ' <span class="opt">(optional)</span>') + '</label>' +
+      '<input id="' + id + '" type="' + type + '"' + (required ? " required" : "") + (placeholder ? ' placeholder="' + esc(placeholder) + '"' : '') + (type === "number" ? ' min="0"' : '') + '></div>';
+  }
+  function selectField(id, label, options, required) {
+    var opts = options.map(function (o) { return '<option value="' + esc(o) + '">' + esc(o) + '</option>'; }).join("");
+    return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><select id="' + id + '"' + (required ? " required" : "") + '>' + opts + '</select></div>';
+  }
+
+  function onAddPatient(e) {
+    e.preventDefault();
+    var name = document.getElementById("pFullName").value.trim();
+    var age = document.getElementById("pAge").value;
+    var gender = document.getElementById("pGender").value;
+    var phone = document.getElementById("pPhone").value.trim();
+    var blood = document.getElementById("pBlood").value.trim();
+    var address = document.getElementById("pAddress").value.trim();
+    if (!name || !phone || age === "") { toast("Fill in the required fields"); return; }
+    var rec = addPatientRecord(name, Number(age), gender, phone, blood, address);
+    save();
+    toast("Patient registered — ID " + rec.id);
+    state.patientSearch = "";
+    renderPatients();
+  }
+
+  function renderPatientTable() {
+    var holder = document.getElementById("patientTableHolder");
+    var term = state.patientSearch.trim().toLowerCase();
+    var rows = db.patients.filter(function (p) {
+      if (!term) return true;
+      return String(p.id) === term || p.name.toLowerCase().indexOf(term) !== -1;
+    }).sort(function (a, b) { return a.id - b.id; });
+
+    document.getElementById("patientCount").textContent = rows.length + " of " + db.patients.length + " shown";
+
+    if (!db.patients.length) {
+      holder.innerHTML = '<div class="empty-state"><strong>No patients registered</strong>Register your first patient to start building records.</div>';
+      return;
+    }
+    if (!rows.length) {
+      holder.innerHTML = '<div class="empty-state"><strong>No matches</strong>Nothing matches &ldquo;' + esc(state.patientSearch) + '&rdquo;.</div>';
+      return;
+    }
+
+    var html = '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Blood</th><th>Registered</th><th></th></tr></thead><tbody>';
+    rows.forEach(function (p) {
+      html += '<tr><td class="id">#' + p.id + '</td><td>' + esc(p.name) + '</td><td class="mono">' + p.age + '</td><td>' + esc(p.gender) + '</td><td class="mono">' + esc(p.phone) + '</td><td>' + esc(p.blood) + '</td><td class="mono">' + esc(p.registeredOn) + '</td>' +
+        '<td class="actions"><button class="btn ghost small" data-history="' + p.id + '" type="button">History</button><button class="btn danger small" data-delpatient="' + p.id + '" type="button">Delete</button></td></tr>';
+      if (state.expandedHistory === p.id) {
+        html += '<tr class="subrow"><td colspan="8">' + patientHistoryHTML(p.id) + '</td></tr>';
+      }
+    });
+    html += '</tbody></table></div>';
+    holder.innerHTML = html;
+
+    holder.querySelectorAll("[data-history]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = Number(btn.dataset.history);
+        state.expandedHistory = state.expandedHistory === id ? null : id;
+        renderPatientTable();
+      });
+    });
+    holder.querySelectorAll("[data-delpatient]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = Number(btn.dataset.delpatient);
+        var p = findPatient(id);
+        if (p && confirm("Remove patient #" + id + " (" + p.name + ")? This does not delete their linked appointments, records or bills.")) {
+          db.patients = db.patients.filter(function (x) { return x.id !== id; });
+          save();
+          toast("Patient removed");
+          renderPatientTable();
+        }
+      });
+    });
+  }
+
+  function patientHistoryHTML(pid) {
+    var recs = db.records.filter(function (r) { return r.patientId === pid; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    if (!recs.length) return '<p class="empty-note">No medical records for this patient yet — records are created when an appointment is completed.</p>';
+    var html = '<div>';
+    recs.forEach(function (r) {
+      var doc = findDoctor(r.doctorId);
+      html += '<div class="history-item"><div class="hd"><span>' + esc(r.date) + '</span><span>' + esc(doc ? doc.name : "Unknown doctor") + '</span></div>' +
+        '<div><strong>Diagnosis:</strong> ' + esc(r.diagnosis) + '</div><div><strong>Prescription:</strong> ' + esc(r.prescription) + '</div></div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  /* =========================================================
+     DOCTORS  (mirrors DoctorManager)
+  ========================================================== */
+  function addDoctorRecord(name, spec, phone) {
+    var rec = { id: nextId("doctor"), name: name, specialization: spec, phone: phone };
+    db.doctors.push(rec);
+    return rec;
+  }
+
+  function renderDoctors() {
+    var html = '';
+    html += '<div class="view-head"><div><h2>Doctors</h2><p class="sub">' + db.doctors.length + ' on staff</p></div>' +
+      '<button class="btn" id="toggleAddDoctor" type="button">Add doctor</button></div>';
+
+    html += '<div class="form-panel" id="doctorFormPanel" style="display:none;">' +
+      '<h3>Add new doctor</h3><p class="hint">Creates a doctor record — mirrors <code>DoctorManager.add_doctor()</code>.</p>' +
+      '<form id="doctorForm"><div class="form-grid">' +
+      field("dName", "Doctor name", "text", true) +
+      field("dSpec", "Specialization", "text", true) +
+      field("dPhone", "Phone number", "tel", true) +
+      '</div><div class="form-actions"><button class="btn" type="submit">Add doctor</button><button class="btn ghost" type="button" id="cancelDoctor">Cancel</button></div></form></div>';
+
+    if (!db.doctors.length) {
+      html += '<div class="empty-state"><strong>No doctors on staff</strong>Add a doctor before booking appointments.</div>';
+    } else {
+      html += '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Specialization</th><th>Phone</th></tr></thead><tbody>';
+      db.doctors.slice().sort(function (a, b) { return a.id - b.id; }).forEach(function (d) {
+        html += '<tr><td class="id">#' + d.id + '</td><td>' + esc(d.name) + '</td><td>' + esc(d.specialization) + '</td><td class="mono">' + esc(d.phone) + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    $main.innerHTML = html;
+    document.getElementById("toggleAddDoctor").addEventListener("click", function () {
+      var panel = document.getElementById("doctorFormPanel");
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+    var cancelBtn = document.getElementById("cancelDoctor");
+    if (cancelBtn) cancelBtn.addEventListener("click", function () { document.getElementById("doctorFormPanel").style.display = "none"; });
+    document.getElementById("doctorForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = document.getElementById("dName").value.trim();
+      var spec = document.getElementById("dSpec").value.trim();
+      var phone = document.getElementById("dPhone").value.trim();
+      if (!name || !spec || !phone) { toast("Fill in all fields"); return; }
+      var rec = addDoctorRecord(name, spec, phone);
+      save();
+      toast("Doctor added — ID " + rec.id);
+      renderDoctors();
+    });
+    var cancelPatientBtn = document.getElementById("cancelPatient");
+    if (cancelPatientBtn) cancelPatientBtn.addEventListener("click", function () { document.getElementById("patientFormPanel").style.display = "none"; });
+  }
+
+  /* =========================================================
+     APPOINTMENTS  (mirrors AppointmentManager)
+  ========================================================== */
+  function addApptRecord(pid, did, date, reason) {
+    var rec = { id: nextId("appt"), patientId: pid, doctorId: did, date: date, reason: reason, status: "Scheduled" };
+    db.appointments.push(rec);
+    return rec;
+  }
+  function completeApptRecord(aid, diagnosis, prescription) {
+    var appt = db.appointments.find(function (a) { return a.id === aid; });
+    if (!appt) return null;
+    appt.status = "Completed";
+    var rec = { id: nextId("record"), patientId: appt.patientId, doctorId: appt.doctorId, diagnosis: diagnosis, prescription: prescription || "None", date: today() };
+    db.records.push(rec);
+    return rec;
+  }
+
+  function renderAppointments() {
+    var html = '';
+    html += '<div class="view-head"><div><h2>Appointments</h2><p class="sub">' + db.appointments.length + ' total</p></div>' +
+      '<button class="btn" id="toggleAddAppt" type="button" ' + (!db.patients.length || !db.doctors.length ? "disabled" : "") + '>Book appointment</button></div>';
+
+    if (!db.patients.length || !db.doctors.length) {
+      html += '<div class="empty-state" style="margin-bottom:20px;"><strong>Register a patient and a doctor first</strong>Booking needs at least one of each.</div>';
+    } else {
+      html += '<div class="form-panel" id="apptFormPanel" style="display:none;"><h3>Book appointment</h3><p class="hint">Mirrors <code>AppointmentManager.book()</code>.</p><form id="apptForm"><div class="form-grid">' +
+        patientSelect("aPatient") + doctorSelect("aDoctor") +
+        field("aDate", "Appointment date", "date", true) +
+        field("aReason", "Reason for visit", "text", true) +
+        '</div><div class="form-actions"><button class="btn" type="submit">Book appointment</button><button class="btn ghost" type="button" id="cancelAppt">Cancel</button></div></form></div>';
+    }
+
+    if (!db.appointments.length) {
+      html += '<div class="empty-state"><strong>No appointments scheduled</strong>Booked appointments appear here.</div>';
+    } else {
+      html += '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Reason</th><th></th></tr></thead><tbody>';
+      db.appointments.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (a) {
+        var p = findPatient(a.patientId), d = findDoctor(a.doctorId);
+        html += '<tr><td class="id">#' + a.id + '</td><td>' + esc(p ? p.name : "—") + '</td><td>' + esc(d ? d.name : "—") + '</td><td class="mono">' + esc(a.date) + '</td>' +
+          '<td><span class="pill ' + (a.status === "Completed" ? "completed" : "scheduled") + '">' + a.status + '</span></td><td>' + esc(a.reason) + '</td>' +
+          '<td class="actions">' + (a.status === "Scheduled" ? '<button class="btn small" data-complete="' + a.id + '" type="button">Complete</button>' : '') + '</td></tr>';
+        if (state.completingAppt === a.id) {
+          html += '<tr class="subrow"><td colspan="7">' + completeApptFormHTML(a.id) + '</td></tr>';
+        }
+      });
+      html += '</tbody></table></div>';
+    }
+
+    $main.innerHTML = html;
+
+    var toggleBtn = document.getElementById("toggleAddAppt");
+    if (toggleBtn && !toggleBtn.disabled) {
+      toggleBtn.addEventListener("click", function () {
+        var panel = document.getElementById("apptFormPanel");
+        panel.style.display = panel.style.display === "none" ? "block" : "none";
+        document.getElementById("aDate").value = today();
+      });
+    }
+    var apptForm = document.getElementById("apptForm");
+    if (apptForm) apptForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var pid = Number(document.getElementById("aPatient").value);
+      var did = Number(document.getElementById("aDoctor").value);
+      var date = document.getElementById("aDate").value || today();
+      var reason = document.getElementById("aReason").value.trim();
+      if (!pid || !did || !reason) { toast("Fill in all fields"); return; }
+      var rec = addApptRecord(pid, did, date, reason);
+      save();
+      toast("Appointment booked — ID " + rec.id);
+      renderAppointments();
+    });
+    var cancelAppt = document.getElementById("cancelAppt");
+    if (cancelAppt) cancelAppt.addEventListener("click", function () { document.getElementById("apptFormPanel").style.display = "none"; });
+
+    document.querySelectorAll("[data-complete]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.completingAppt = state.completingAppt === Number(btn.dataset.complete) ? null : Number(btn.dataset.complete);
+        renderAppointments();
+      });
+    });
+    var completeForm = document.getElementById("completeApptForm");
+    if (completeForm) completeForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var aid = Number(completeForm.dataset.aid);
+      var diagnosis = document.getElementById("cDiagnosis").value.trim();
+      var prescription = document.getElementById("cPrescription").value.trim();
+      if (!diagnosis) { toast("Diagnosis is required"); return; }
+      completeApptRecord(aid, diagnosis, prescription);
+      save();
+      toast("Appointment completed and record saved");
+      state.completingAppt = null;
+      renderAppointments();
+    });
+  }
+
+  function completeApptFormHTML(aid) {
+    return '<form id="completeApptForm" data-aid="' + aid + '" class="inline-complete">' +
+      '<div class="field"><label for="cDiagnosis">Diagnosis</label><input id="cDiagnosis" type="text" required></div>' +
+      '<div class="field"><label for="cPrescription">Prescription <span class="opt">(optional)</span></label><input id="cPrescription" type="text"></div>' +
+      '<button class="btn small" type="submit">Save &amp; complete</button>' +
+      '</form>';
+  }
+
+  function patientSelect(id) {
+    var opts = db.patients.slice().sort(function (a, b) { return a.name.localeCompare(b.name); })
+      .map(function (p) { return '<option value="' + p.id + '">#' + p.id + ' — ' + esc(p.name) + '</option>'; }).join("");
+    return '<div class="field"><label for="' + id + '">Patient</label><select id="' + id + '" required><option value="">Select a patient</option>' + opts + '</select></div>';
+  }
+  function doctorSelect(id) {
+    var opts = db.doctors.slice().sort(function (a, b) { return a.name.localeCompare(b.name); })
+      .map(function (d) { return '<option value="' + d.id + '">' + esc(d.name) + ' — ' + esc(d.specialization) + '</option>'; }).join("");
+    return '<div class="field"><label for="' + id + '">Doctor</label><select id="' + id + '" required><option value="">Select a doctor</option>' + opts + '</select></div>';
+  }
+
+  /* =========================================================
+     BILLING  (mirrors BillingManager)
+  ========================================================== */
+  function addBillRecord(pid, desc, amount) {
+    var rec = { id: nextId("bill"), patientId: pid, description: desc, amount: amount, date: today(), paid: "Unpaid" };
+    db.bills.push(rec);
+    return rec;
+  }
+  function markBillPaidRecord(bid) {
+    var b = db.bills.find(function (x) { return x.id === bid; });
+    if (b) b.paid = "Paid";
+  }
+
+  function renderBilling() {
+    var totalDue = db.bills.filter(function (b) { return b.paid === "Unpaid"; }).reduce(function (s, b) { return s + b.amount; }, 0);
+    var html = '';
+    html += '<div class="view-head"><div><h2>Billing</h2><p class="sub">' + db.bills.length + ' bills &middot; ' + fmtMoney(totalDue) + ' outstanding</p></div>' +
+      '<button class="btn" id="toggleAddBill" type="button" ' + (!db.patients.length ? "disabled" : "") + '>Generate bill</button></div>';
+
+    if (!db.patients.length) {
+      html += '<div class="empty-state" style="margin-bottom:20px;"><strong>Register a patient first</strong>A bill needs a patient to attach to.</div>';
+    } else {
+      html += '<div class="form-panel" id="billFormPanel" style="display:none;"><h3>Generate bill</h3><p class="hint">Mirrors <code>BillingManager.generate_bill()</code>.</p><form id="billForm"><div class="form-grid">' +
+        patientSelect("bPatient") +
+        field("bDesc", "Description", "text", true, "e.g. Consultation, Lab test") +
+        field("bAmount", "Amount (Rs.)", "number", true) +
+        '</div><div class="form-actions"><button class="btn" type="submit">Generate bill</button><button class="btn ghost" type="button" id="cancelBill">Cancel</button></div></form></div>';
+    }
+
+    if (!db.bills.length) {
+      html += '<div class="empty-state"><strong>No bills yet</strong>Generated bills and their payment status appear here.</div>';
+    } else {
+      html += '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Patient</th><th>Description</th><th>Amount</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody>';
+      db.bills.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (b) {
+        var p = findPatient(b.patientId);
+        html += '<tr><td class="id">#' + b.id + '</td><td>' + esc(p ? p.name : "—") + '</td><td>' + esc(b.description) + '</td><td class="mono">' + fmtMoney(b.amount) + '</td><td class="mono">' + esc(b.date) + '</td>' +
+          '<td><span class="pill ' + (b.paid === "Paid" ? "paid" : "unpaid") + '">' + b.paid + '</span></td>' +
+          '<td class="actions">' + (b.paid === "Unpaid" ? '<button class="btn small" data-markpaid="' + b.id + '" type="button">Mark paid</button>' : '') + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+      html += '<p style="text-align:right;margin-top:12px;font-size:13.5px;color:var(--muted);">Total outstanding (unpaid): <strong style="color:var(--rose);font-family:var(--font-mono);">' + fmtMoney(totalDue) + '</strong></p>';
+    }
+
+    $main.innerHTML = html;
+
+    var toggleBtn = document.getElementById("toggleAddBill");
+    if (toggleBtn && !toggleBtn.disabled) toggleBtn.addEventListener("click", function () {
+      var panel = document.getElementById("billFormPanel");
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+    var billForm = document.getElementById("billForm");
+    if (billForm) billForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var pid = Number(document.getElementById("bPatient").value);
+      var desc = document.getElementById("bDesc").value.trim();
+      var amount = Number(document.getElementById("bAmount").value);
+      if (!pid || !desc || !amount || amount <= 0) { toast("Fill in all fields with a valid amount"); return; }
+      var rec = addBillRecord(pid, desc, amount);
+      save();
+      toast("Bill generated — ID " + rec.id);
+      renderBilling();
+    });
+    var cancelBill = document.getElementById("cancelBill");
+    if (cancelBill) cancelBill.addEventListener("click", function () { document.getElementById("billFormPanel").style.display = "none"; });
+
+    document.querySelectorAll("[data-markpaid]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        markBillPaidRecord(Number(btn.dataset.markpaid));
+        save();
+        toast("Bill marked as paid");
+        renderBilling();
+      });
+    });
+  }
+
+  /* =========================================================
+     BOOT
+  ========================================================== */
+  load();
+
+  document.querySelectorAll("nav.primary-nav button").forEach(function (btn) {
+    btn.addEventListener("click", function () { switchTab(btn.dataset.tab); });
+  });
+  document.getElementById("menuToggle").addEventListener("click", function () {
+    document.getElementById("primaryNav").classList.toggle("open");
+  });
+
+  function tickClock() {
+    var el = document.getElementById("sidebarClock");
+    if (el) el.textContent = new Date().toString().slice(0, 21);
+  }
+  tickClock();
+  setInterval(tickClock, 30000);
+
+  switchTab("dashboard");
+})();
+</script>
+</body>
+</html>
